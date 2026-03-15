@@ -3,33 +3,27 @@ const Product = require('../models/Product');
 const Topping = require('../models/Topping');
 const GlobalSettings = require('../models/GlobalSettings');
 const sendWhatsApp = require('../utils/whatsapp');
+const generateInvoice = require('../utils/generateInvoice');
 
 // 1. PLACE NEW ORDER
 const placeOrder = async (req, res) => {
   try {
     const { items, toppingIds, customer } = req.body;
 
-    // Fetch global settings for price calculation
     let settings = await GlobalSettings.findOne();
-
-    // If no settings exist yet, use defaults
     if (!settings) {
       settings = { taxRate: 0.10, deliveryFee: 2.99, priceMultiplier: 1.0 };
     }
 
-    // Calculate total price server-side
     let subtotal = 0;
-
-    // Calculate price for each item
     const orderItems = [];
+
     for (const item of items) {
       const product = await Product.findById(item.productId);
-
       if (!product) {
         return res.status(404).json({ message: `Product not found` });
       }
 
-      // Find the selected size and its price
       const sizeData = product.sizes.find(s => s.size === item.size);
       if (!sizeData) {
         return res.status(400).json({ message: `Size not found` });
@@ -46,7 +40,6 @@ const placeOrder = async (req, res) => {
       });
     }
 
-    // Add topping prices
     if (toppingIds && toppingIds.length > 0) {
       for (const toppingId of toppingIds) {
         const topping = await Topping.findById(toppingId);
@@ -54,10 +47,8 @@ const placeOrder = async (req, res) => {
       }
     }
 
-    // Apply tax and delivery fee
     const totalPrice = (subtotal + settings.deliveryFee) * (1 + settings.taxRate);
 
-    // Save order to database
     const newOrder = await Order.create({
       items: orderItems,
       toppings: toppingIds || [],
@@ -66,14 +57,14 @@ const placeOrder = async (req, res) => {
       status: 'Pending'
     });
 
-    // 🔥 Fire Socket.io event - notify dispatch panel instantly!
+    // 🔥 Socket.io
     const io = req.app.get('io');
     io.emit('new_order', {
       message: 'New order received! 🍕',
       order: newOrder
     });
 
-    // 📱 WhatsApp Notification Customer Ko
+    // 📱 WhatsApp Notification
     try {
       const whatsappMsg =
 `🍕 *Smart Pizza Café*
@@ -147,23 +138,21 @@ const updateOrderStatus = async (req, res) => {
     const { status } = req.body;
 
     const order = await Order.findById(req.params.id);
-
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Update status
     order.status = status;
     await order.save();
 
-    // 🔥 Notify everyone about status change via Socket.io
+    // 🔥 Socket.io
     const io = req.app.get('io');
     io.emit('order_status_update', {
       message: `Order status updated to ${status}`,
       order
     });
 
-    // 📱 WhatsApp Status Update Customer Ko
+    // 📱 WhatsApp Status Update
     try {
       const statusMessages = {
         Preparing: "👨‍🍳 Aapka order kitchen mein prepare ho raha hai!",
@@ -197,9 +186,28 @@ Shukriya! 🙏`;
   }
 };
 
+// 5. DOWNLOAD INVOICE
+const downloadInvoice = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate('items.product', 'name')
+      .populate('toppings', 'name price');
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    generateInvoice(order, res);
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   placeOrder,
   getOrders,
   getOrderById,
-  updateOrderStatus
+  updateOrderStatus,
+  downloadInvoice
 };

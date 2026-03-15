@@ -5,7 +5,8 @@ const {
   placeOrder,
   getOrders,
   getOrderById,
-  updateOrderStatus
+  updateOrderStatus,
+  downloadInvoice
 } = require('../controllers/orderController');
 
 const { protect, authorizeRoles } = require('../middleware/authMiddleware');
@@ -21,5 +22,8 @@ router.get('/:id', protect, authorizeRoles('Admin', 'Dispatcher'), getOrderById)
 
 // PATCH /api/orders/:id/status - Admin, Dispatcher, Kitchen
 router.patch('/:id/status', protect, authorizeRoles('Admin', 'Dispatcher', 'Kitchen'), updateOrderStatus);
+
+// GET /api/orders/:id/invoice - Download PDF Invoice
+router.get('/:id/invoice', protect, authorizeRoles('Admin', 'Dispatcher'), downloadInvoice);
 
 module.exports = router;

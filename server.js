@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const http = require('http');
 const { Server } = require('socket.io');
+const cors = require('cors');
 
 // Import all routes
 const authRoutes = require('./routes/authRoutes');
@@ -20,6 +21,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const server = http.createServer(app);
