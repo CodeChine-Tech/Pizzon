@@ -11,6 +11,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const toppingRoutes = require('./routes/toppingRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const riderRoutes = require('./routes/riderRoutes');
+const couponRoutes = require('./routes/couponRoutes');
 
 // Import socket handler
 const socketHandler = require('./socket/socketHandler');
@@ -37,6 +38,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/toppings', toppingRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/rider', riderRoutes);
+app.use('/api/coupons', couponRoutes);
 
 app.get('/', (req, res) => {
   res.send('Smart Pizza Café Backend is running! 🍕');
