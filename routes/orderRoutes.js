@@ -6,6 +6,7 @@ const {
   getOrders,
   getOrderById,
   updateOrderStatus,
+  pickupOrder,
   downloadInvoice
 } = require('../controllers/orderController');
 
@@ -22,6 +23,9 @@ router.get('/:id', protect, authorizeRoles('Admin', 'Dispatcher'), getOrderById)
 
 // PATCH /api/orders/:id/status - Admin, Dispatcher, Kitchen
 router.patch('/:id/status', protect, authorizeRoles('Admin', 'Dispatcher', 'Kitchen'), updateOrderStatus);
+
+// POST /api/orders/:id/pickup - Rider picks up order (send customer email)
+router.post('/:id/pickup', protect, authorizeRoles('Rider', 'Admin', 'Dispatcher'), pickupOrder);
 
 // GET /api/orders/:id/invoice - Download PDF Invoice
 router.get('/:id/invoice', protect, authorizeRoles('Admin', 'Dispatcher'), downloadInvoice);

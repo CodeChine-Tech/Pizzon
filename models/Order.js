@@ -53,6 +53,12 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
+  },
+
+  email: {
+    type: String,
+    required: true,
+    trim: true
   }
 
 });
@@ -86,8 +92,13 @@ const orderSchema = new mongoose.Schema(
     },
 
     // Customer who placed the order
-    customer: customerSchema
+  customer: customerSchema,
 
+  // Rider assigned for delivery (optional)
+  rider: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
   },
 
   // Auto adds createdAt and updatedAt
