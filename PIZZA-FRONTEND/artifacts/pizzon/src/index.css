@@ -1,0 +1,256 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --breakpoint-xs: 375px;
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  --primary: 24 9.8% 10%;
+  --primary-foreground: 60 9.1% 97.8%;
+  --secondary: 60 4.8% 95.9%;
+  --secondary-foreground: 24 9.8% 10%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --accent: 60 4.8% 95.9%;
+  --accent-foreground: 24 9.8% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --ring: 20 14.3% 4.1%;
+  --app-font-sans: 'Poppins', sans-serif;
+  --app-font-serif: 'Playfair Display', serif;
+  --app-font-mono: Menlo, monospace;
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * { @apply border-border box-border; }
+  body { @apply font-sans antialiased bg-background text-foreground; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  img { max-width: 100%; }
+}
+
+/* ─── Brand Colors ─── */
+.pizzon-red { color: #e8342e; }
+.pizzon-bg-red { background-color: #e8342e; }
+
+/* ─── Navigation ─── */
+.navbar-scrolled {
+  background: #1a1a1a !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+/* ─── Section Headings ─── */
+.section-subtitle {
+  font-family: 'Pacifico', cursive;
+  color: #e8342e;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ─── Dividers ─── */
+.divider-red {
+  width: 60px; height: 3px;
+  background: #e8342e;
+  margin: 12px auto 20px;
+}
+.divider-red-left {
+  width: 60px; height: 3px;
+  background: #e8342e;
+  margin: 12px 0 20px;
+}
+
+/* ─── Buttons ─── */
+.btn-red {
+  background-color: #e8342e;
+  color: #fff;
+  border: 2px solid #e8342e;
+  padding: 11px 28px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  text-align: center;
+}
+.btn-red:hover { background-color: transparent; color: #e8342e; }
+
+.btn-outline-white {
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 11px 28px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  text-align: center;
+}
+.btn-outline-white:hover { background-color: #e8342e; border-color: #e8342e; color: #fff; }
+
+/* ─── Cards ─── */
+.pizza-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.pizza-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+
+/* ─── Menu Tabs ─── */
+.menu-tab-btn {
+  padding: 9px 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid #e8342e;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: transparent;
+  color: #e8342e;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.menu-tab-btn.active, .menu-tab-btn:hover { background: #e8342e; color: #fff; }
+
+/* ─── Stars ─── */
+.stars { color: #f5a623; }
+
+/* ─── Gallery ─── */
+.gallery-item { overflow: hidden; position: relative; }
+.gallery-item .overlay {
+  position: absolute; inset: 0;
+  background: rgba(232,52,46,0.7);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.gallery-item:hover .overlay { opacity: 1; }
+.gallery-item img { transition: transform 0.5s ease; width: 100%; height: 100%; object-fit: cover; }
+.gallery-item:hover img { transform: scale(1.08); }
+
+/* ─── Team ─── */
+.team-card { text-align: center; overflow: hidden; }
+.team-card .team-img-wrap { position: relative; overflow: hidden; }
+.team-card .team-img-wrap img { transition: transform 0.4s ease; width: 100%; height: 240px; object-fit: cover; }
+.team-card:hover .team-img-wrap img { transform: scale(1.05); }
+.team-social {
+  position: absolute; bottom: -50px; left: 0; right: 0;
+  background: rgba(232,52,46,0.9);
+  padding: 10px; display: flex; justify-content: center; gap: 10px;
+  transition: bottom 0.3s;
+}
+.team-card:hover .team-social { bottom: 0; }
+
+/* ─── Testimonial ─── */
+.testimonial-card {
+  background: #fff; border-radius: 8px; padding: 28px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07); text-align: center;
+}
+
+/* ─── Parallax backgrounds ─── */
+.about-bg {
+  background: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),
+    url('https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=1920&q=80') center/cover no-repeat fixed;
+}
+.reservation-bg {
+  background: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),
+    url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1920&q=80') center/cover no-repeat fixed;
+}
+
+/* ─── Forms ─── */
+.form-input {
+  width: 100%; padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  color: #fff; outline: none; transition: border 0.3s;
+  font-family: 'Poppins', sans-serif; font-size: 0.875rem;
+}
+.form-input::placeholder { color: rgba(255,255,255,0.55); }
+.form-input:focus { border-color: #e8342e; }
+
+.form-input-light {
+  width: 100%; padding: 11px 14px;
+  border: 1px solid #ddd;
+  background: #fff; color: #333; outline: none;
+  transition: border 0.3s; font-family: 'Poppins', sans-serif; font-size: 0.875rem;
+}
+.form-input-light:focus { border-color: #e8342e; }
+
+/* ─── Back to top ─── */
+.back-to-top {
+  position: fixed; bottom: 24px; right: 20px;
+  background: #e8342e; color: #fff;
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; cursor: pointer; z-index: 999; transition: background 0.3s;
+  font-size: 1rem;
+}
+.back-to-top:hover { background: #c0272d; }
+
+/* ─── Horizontal scroll wrapper (for category tabs on mobile) ─── */
+.scroll-x-snap {
+  display: flex; gap: 8px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; padding-bottom: 4px;
+}
+.scroll-x-snap::-webkit-scrollbar { display: none; }
+
+/* ─── Animations ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp { animation: fadeInUp 0.55s ease forwards; }
+
+/* ─── Fix fixed backgrounds on iOS (no attachment:fixed support) ─── */
+@media (max-width: 768px) {
+  .about-bg, .reservation-bg {
+    background-attachment: scroll !important;
+  }
+}
+
+/* ─── Ultra-wide screens ─── */
+@media (min-width: 1920px) {
+  .max-w-7xl { max-width: 1400px; }
+}
