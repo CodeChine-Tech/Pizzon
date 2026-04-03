@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react';
-import { api } from '../lib/api';
-import { useCart } from '../context/CartContext';
+import { useState } from 'react';
 
 const categories = ['Pizza', 'Pasta', 'Burgers', 'Salads', 'Desserts', 'Drinks'];
 
@@ -51,34 +49,6 @@ const menuItems = {
 
 export default function Menu() {
   const [active, setActive] = useState('Pizza');
-  const [pizzas, setPizzas] = useState([]);
-  const { addItem } = useCart();
-
-  useEffect(() => {
-    const fetchPizzas = async () => {
-      try {
-        const data = await api.get('/products');
-        setPizzas(data.products || []);
-      } catch (error) {
-        console.error('Failed to fetch pizzas:', error);
-      }
-    };
-    fetchPizzas();
-  }, []);
-
-  const getMenuItems = (category) => {
-    if (category === 'Pizza') {
-      return pizzas.map(pizza => ({
-        id: pizza._id,
-        name: pizza.name,
-        desc: pizza.description,
-        price: `$${pizza.sizes[0]?.price || 'N/A'}`, // Use smallest size price
-        img: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80', // Placeholder
-        badge: pizza.available ? null : 'Out of Stock'
-      }));
-    }
-    return menuItems[category] || [];
-  };
 
   return (
     <section id="menu" className="py-14 sm:py-20 lg:py-24 bg-gray-50">
@@ -109,7 +79,7 @@ export default function Menu() {
 
         {/* Items */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
-          {getMenuItems(active).map((item, i) => (
+          {menuItems[active].map((item, i) => (
             <div key={i} className="pizza-card bg-white rounded-xl overflow-hidden shadow-md">
               <div className="relative overflow-hidden" style={{ height: 'clamp(160px,25vw,210px)' }}>
                 <img src={item.img} alt={item.name}
@@ -126,7 +96,7 @@ export default function Menu() {
                   <span className="font-bold text-lg ml-3 flex-shrink-0" style={{ color: '#e8342e' }}>{item.price}</span>
                 </div>
                 <p className="text-gray-500 text-sm leading-relaxed mb-3">{item.desc}</p>
-                <button onClick={() => addItem(item)} className="text-sm font-semibold border-b-2 pb-0.5 transition-colors" style={{ color: '#e8342e', borderColor: '#e8342e' }}>
+                <button className="text-sm font-semibold border-b-2 pb-0.5 transition-colors" style={{ color: '#e8342e', borderColor: '#e8342e' }}>
                   Order Now →
                 </button>
               </div>
