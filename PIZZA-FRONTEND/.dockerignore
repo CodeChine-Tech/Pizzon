@@ -1,0 +1,6 @@
+node_modules
+**/node_modules
+artifacts/pizzon/dist
+artifacts/pizzon-admin/admin-dist
+.git
+.env

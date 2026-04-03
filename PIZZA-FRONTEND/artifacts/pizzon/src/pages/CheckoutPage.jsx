@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useLocation } from 'wouter';
-import { api } from '../lib/api';
 
 const STEPS = ['Summary', 'Delivery', 'Payment', 'Done'];
 
@@ -98,33 +97,10 @@ export default function CheckoutPage() {
     return Object.keys(e).length === 0;
   };
 
-  const next = async () => {
+  const next = () => {
     if (step === 1 && !validateDelivery()) return;
     if (step === 2 && !validatePayment()) return;
-    if (step === 2) {
-      // Place the order
-      try {
-        const orderData = {
-          items: items.map(item => ({
-            productId: item.id,
-            size: 'Small', // Use Small size for now
-            quantity: item.qty
-          })),
-          customer: {
-            name: delivery.name,
-            phone: delivery.phone,
-            address: `${delivery.address}, ${delivery.city}, ${delivery.zip}`,
-            email: delivery.email
-          }
-        };
-        await api.post('/orders', orderData);
-        clearCart();
-      } catch (error) {
-        console.error('Failed to place order:', error);
-        // Perhaps show error message
-        return; // Don't proceed
-      }
-    }
+    if (step === 2) clearCart();
     setStep(s => Math.min(s + 1, 3));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

@@ -3,20 +3,19 @@ import { useLocation } from 'wouter';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useAuth();
   const [, navigate] = useLocation();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
-    const success = await login(email, password);
-    if (success) {
+    if (login(username, password)) {
       navigate('/');
     } else {
-      setError('Invalid credentials.');
+      setError('Please enter a username.');
     }
   };
 
@@ -32,14 +31,14 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <p className="text-red-600 text-sm">{error}</p>}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="form-input"
-              placeholder="Enter email"
-              autoComplete="email"
+              placeholder="Enter username"
+              autoComplete="username"
             />
           </div>
           <div>

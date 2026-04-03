@@ -11,7 +11,7 @@ function formatTime(iso) {
   return `${diffH}h ago`;
 }
 
-export default function OrdersTable({ orders, onAssign, onPickup, onInvoice, onAddOrder }) {
+export default function OrdersTable({ orders, onAssign, onInvoice, onAddOrder }) {
   const [, navigate] = useLocation();
 
   return (
@@ -59,15 +59,6 @@ export default function OrdersTable({ orders, onAssign, onPickup, onInvoice, onA
                     {order.riderId && order.status !== 'DELIVERED' && (
                       <button type="button" onClick={() => navigate('/track')} className="text-sm font-medium px-2 py-1 rounded border border-gray-300 hover:border-[#e8342e] hover:text-[#e8342e]">
                         Track
-                      </button>
-                    )}
-                    {order.riderId && (order.status === 'Preparing' || order.status === 'Pending') && (
-                      <button
-                        type="button"
-                        onClick={() => onPickup(order)}
-                        className="text-sm font-medium px-2 py-1 rounded bg-[#e8342e] text-white"
-                      >
-                        Picked up
                       </button>
                     )}
                     <button type="button" onClick={() => onInvoice(order)} className="text-sm font-medium px-2 py-1 rounded border border-gray-300 hover:border-[#e8342e] hover:text-[#e8342e]">

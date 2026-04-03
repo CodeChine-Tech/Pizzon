@@ -5,7 +5,7 @@ import AddOrderModal from '../components/AddOrderModal';
 import { useDispatch } from '../context/DispatchContext';
 
 export default function OrdersDashboard() {
-  const { orders, pickupOrder } = useDispatch();
+  const { orders } = useDispatch();
   const [assignOrder, setAssignOrder] = useState(null);
   const [addOrderOpen, setAddOrderOpen] = useState(false);
 
@@ -28,7 +28,7 @@ export default function OrdersDashboard() {
           Add Order
         </button>
       </div>
-      <OrdersTable orders={orders} onAssign={setAssignOrder} onPickup={pickupOrder} onInvoice={handleInvoice} onAddOrder={() => setAddOrderOpen(true)} />
+      <OrdersTable orders={orders} onAssign={setAssignOrder} onInvoice={handleInvoice} onAddOrder={() => setAddOrderOpen(true)} />
       {assignOrder && <RiderAssignmentModal order={assignOrder} onClose={() => setAssignOrder(null)} />}
       {addOrderOpen && <AddOrderModal onClose={() => setAddOrderOpen(false)} />}
     </div>
