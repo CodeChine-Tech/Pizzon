@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
+const defaultBase = import.meta.env.DEV ? 'http://localhost:5000/api' : '/api';
+const API_BASE = import.meta.env.VITE_API_BASE || defaultBase;
 
 export const api = {
   get: async (endpoint, token = null) => {

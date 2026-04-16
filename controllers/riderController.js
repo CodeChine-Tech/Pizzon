@@ -1,4 +1,5 @@
 const RiderLocation = require('../models/RiderLocation');
+const safeEmit = require('../utils/socket');
 
 // 1. RIDER UPDATES HIS LOCATION
 const updateLocation = async (req, res) => {
@@ -31,8 +32,7 @@ const updateLocation = async (req, res) => {
     }
 
     // 🔥 Fire Socket.io — broadcast location to everyone watching
-    const io = req.app.get('io');
-    io.emit('rider_location_update', {
+    safeEmit(req, 'rider_location_update', {
       orderId,
       riderId,
       latitude,
@@ -84,8 +84,7 @@ const deactivateLocation = async (req, res) => {
     );
 
     // Notify everyone rider is done
-    const io = req.app.get('io');
-    io.emit('rider_offline', {
+    safeEmit(req, 'rider_offline', {
       orderId,
       riderId,
       message: 'Rider has delivered the order'

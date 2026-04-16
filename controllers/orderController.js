@@ -5,6 +5,7 @@ const GlobalSettings = require('../models/GlobalSettings');
 const sendWhatsApp = require('../utils/whatsapp');
 const { sendOrderConfirmation, sendStatusUpdate, sendEmail } = require('../utils/email');
 const generateInvoice = require('../utils/generateInvoice');
+const safeEmit = require('../utils/socket');
 
 // 1. PLACE NEW ORDER
 const placeOrder = async (req, res) => {
@@ -59,8 +60,7 @@ const placeOrder = async (req, res) => {
     });
 
     // 🔥 Socket.io
-    const io = req.app.get('io');
-    io.emit('new_order', {
+    safeEmit(req, 'new_order', {
       message: 'New order received! 🍕',
       order: newOrder
     });
@@ -169,8 +169,7 @@ const updateOrderStatus = async (req, res) => {
     await order.save();
 
     // 🔥 Socket.io
-    const io = req.app.get('io');
-    io.emit('order_status_update', {
+    safeEmit(req, 'order_status_update', {
       message: `Order status updated to ${status}`,
       order
     });
@@ -235,8 +234,7 @@ const pickupOrder = async (req, res) => {
     await order.save();
 
     // 🔥 Socket.io broadcast
-    const io = req.app.get('io');
-    io.emit('order_status_update', {
+    safeEmit(req, 'order_status_update', {
       message: 'Order is out for delivery 🚴',
       order
     });
